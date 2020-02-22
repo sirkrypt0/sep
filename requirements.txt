@@ -7,3 +7,4 @@ pytz==2019.3
 setuptools==40.8.0
 sqlparse==0.3.0
 djangorestframework=3.11.0
+django-cors-headers=3.2.1
