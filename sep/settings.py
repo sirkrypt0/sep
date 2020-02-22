@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'semesterplaner.apps.SemesterplanerConfig',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -73,6 +74,12 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'sep.wsgi.application'
 
+# Rest framework
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny',
+    ]
+}
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
