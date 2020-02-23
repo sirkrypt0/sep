@@ -1,5 +1,5 @@
 from django.test import TestCase
-from semesterplaner.models import *
+
 
 # Create your tests here.
 
