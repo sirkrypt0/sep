@@ -1,10 +1,11 @@
 from datetime import time
 from django.test import TestCase
-
+import pytest
 # Create your tests here.
 from semesterplaner.models import Lecturer, Lecture, TimeSlot
 
 
+@pytest.mark.django_db
 class LecturerModelTest(TestCase):
 
     @classmethod
@@ -17,6 +18,7 @@ class LecturerModelTest(TestCase):
         self.assertEqual(expected_name, 'Tester')
 
 
+@pytest.mark.django_db
 class LectureModelTest(TestCase):
 
     @classmethod
@@ -54,6 +56,7 @@ class LectureModelTest(TestCase):
         self.assertEqual(expected_description, 'Test description')
 
 
+@pytest.mark.django_db
 class TimeSlotModelTest(TestCase):
 
     @classmethod
