@@ -14,6 +14,7 @@ data/
 .idea/**/uiDesigner.xml
 .idea/**/gradle.xml
 .idea/**/libraries
+.idea
 *.iws /out/
 
 # Byte-compiled / optimized / DLL files
