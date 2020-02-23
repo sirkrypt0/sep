@@ -1,0 +1,9 @@
+.navbar {
+    background: #495057;
+    width: auto;
+    height: 2.6em;
+}
+
+.navbar-brand, .nav-link {
+    color: #FFFFFF !important;
+}
