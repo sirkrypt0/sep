@@ -33,3 +33,5 @@ jobs:
         pip install pytest
         pytest
       working-directory: ${{ env.working-directory }}
+      env:
+        DJANGO_SETTINGS_MODULE: sep.settings
