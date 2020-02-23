@@ -17,7 +17,7 @@
       <sourceFolder url="file://$MODULE_DIR$/backend" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/backend/venv" />
     </content>
-    <orderEntry type="jdk" jdkName="Python 3.7 (sep) (2)" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="Python 3.7 (sep)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
   <component name="PackageRequirementsSettings">
