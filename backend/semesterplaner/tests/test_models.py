@@ -1,7 +1,9 @@
+from datetime import time
+
 from django.test import TestCase
-from backend.semesterplaner.models import *
 
 # Create your tests here.
+from semesterplaner.models import Lecturer, Lecture, TimeSlot
 
 
 class LecturerModelTest(TestCase):
