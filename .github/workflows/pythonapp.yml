@@ -35,3 +35,4 @@ jobs:
       working-directory: ${{ env.working-directory }}
       env:
         DJANGO_SETTINGS_MODULE: sep.settings
+        SECRET_KEY: supersecretkey
