@@ -1,20 +1,35 @@
+os: linux
 language: python
-python: "3.7"
-dist: xenial
-sudo: required
-cache:
-  directories:
-  - $HOME/.cache/pip
-env:
-  - SECRET_KEY="sep-travis-secret-key" DB_USER="postgres" DB_NAME="sep"
-
-services:
-  - postgresql
-before_install:
-  - cd backend
-install:
-  - pip install -r requirements.txt
-before_script:
-  - psql -c 'create database sep;' -U postgres
-script:
-  - python manage.py test
+jobs:
+  include:
+    - stage: "Test Front- & Backend"
+      name: "Test Django Backend"
+      language: python
+      python: "3.7"
+      dist: xenial
+      cache:
+        directories:
+        - $HOME/.cache/pip
+      env:
+        - SECRET_KEY="sep-travis-secret-key" DB_USER="postgres" DB_NAME="sep"
+      services:
+        - postgresql
+      before_install:
+        - cd backend
+      install:
+        - pip install -r requirements.txt
+      before_script:
+        - psql -c 'create database sep;' -U postgres
+      script:
+        - python manage.py test
+    - name: "Test React Frontend"
+      language: node_js
+      node_js: 12
+      before_install:
+        - cd frontend
+      install:
+        - npm install
+      script:
+        - npx eslint ./src/
+        - npm run build --if-present
+        - npm test
