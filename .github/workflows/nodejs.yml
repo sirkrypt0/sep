@@ -2,8 +2,8 @@ name: Frontend
 
 on:
   push:
-    paths:
-      - 'frontend/**'
+    branches-ignore:
+      - '**'
 
 jobs:
   build:
