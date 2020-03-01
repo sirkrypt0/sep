@@ -1,20 +1,18 @@
 import React, {Component} from 'react';
 import '../App.css';
 import Header from './Header/Header';
+import List from './ListGroup/ListGroup'
 
 /** The App that gets loaded on site */
 class App extends Component {
-  /**
-   * renders the App on site
-   * @return {[HTMLDivElement]} HTML to be displayed
-   */
-  render() {
-    return (
-      <div className="App">
-        <Header/>
-      </div>
-    );
-  }
+    render() {
+        return (
+            <div className="App">
+                <Header/>
+                <List />
+            </div>
+        );
+    }
 }
 
 export default App;
