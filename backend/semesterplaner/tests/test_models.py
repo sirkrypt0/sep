@@ -66,6 +66,7 @@ class TimeSlotModelTest(TestCase):
                                description='Test description')
         TimeSlot.objects.create(weekday=0,
                                 time=time(9, 00),
+                                duration=45,
                                 lecture_id=Lecture.objects.first().pk,
                                 hall='HS 2',
                                 type=0)
@@ -79,6 +80,11 @@ class TimeSlotModelTest(TestCase):
         timeslot = TimeSlot.objects.first()
         expected_time = timeslot.time
         self.assertEqual(expected_time, time(9, 00))
+
+    def test_duration_content(self):
+        timeslot = TimeSlot.objects.first()
+        expected_duration = timeslot.duration
+        self.assertEqual(expected_duration, 45)
 
     def test_lecture_content(self):
         timeslot = TimeSlot.objects.first()
