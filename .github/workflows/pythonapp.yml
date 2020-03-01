@@ -1,0 +1,52 @@
+name: Backend
+
+on:
+  push:
+    branches-ignore: 
+      - '**'
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    env:
+      SECRET_KEY: sep-gitci-secret-key
+      DB_USER: postgres
+      DB_NAME: sep
+      DB_HOST: localhost
+      WORKING_DIRECTORY: ./backend
+      
+    services:
+      postgres:
+        image: postgres:10.8
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: ""
+          POSTGRES_DB: sep
+        ports:
+        # will assign a random free host port
+        - 5432/tcp
+        # needed because the postgres container does not provide a healthcheck
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python 3.7
+      uses: actions/setup-python@v1
+      with:
+        python-version: 3.7
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+      working-directory: ${{ env.WORKING_DIRECTORY }}
+    - name: Lint with pylint
+      run: |
+        pip install pylint
+      working-directory: ${{ env.WORKING_DIRECTORY }}
+    - name: Test Django
+      run: |
+        python manage.py test
+      working-directory: ${{ env.WORKING_DIRECTORY }}
+      env:
+        DB_PORT: ${{ job.services.postgres.ports[5432] }}
