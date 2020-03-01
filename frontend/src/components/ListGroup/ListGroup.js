@@ -13,38 +13,31 @@ class List extends Component{
     }
   }
 
-  componentDidMount() {
-    fetch("http://localhost:8000/api/")
-    .then(response => {
-      if (response.status > 400) {
-        return this.setState(() => {
-          return { placeholder: "Something went wrong!" };
-        });
-      }
-      return response.json();
-    })
-    .then(data => {
-      this.setState(() => {
-        return {
-          data,
-          loaded: true
-        };
+  async componentDidMount() {
+    try {
+      const response = await fetch("http://localhost:8000/api/");
+      const data = await response.json();
+      this.setState({
+        data
       });
-    });
+    }
+    catch(exception){
+      console.log(exception);
+    }
   }
 
-render() {
-  return(
-    <ListGroup>
-      {this.state.data.map(lecture => {
-        return (
-            <ListGroupItem key={lecture.id}>
-              {lecture.title}
-            </ListGroupItem>
-        );
-      })}
-    </ListGroup>
-  );
+  render() {
+    return(
+      <ListGroup>
+        {this.state.data.map(lecture => {
+          return (
+              <ListGroupItem key={lecture.id}>
+                {lecture.title}
+              </ListGroupItem>
+          );
+        })}
+      </ListGroup>
+    );
   }
 }
 
