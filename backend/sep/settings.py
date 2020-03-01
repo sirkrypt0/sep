@@ -35,6 +35,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
+    'mozilla_django_oidc',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
@@ -46,15 +47,15 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',
-    'django.middleware.common.CommonMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'mozilla_django_oidc.middleware.SessionRefresh'
 ]
 
 ROOT_URLCONF = 'sep.urls'
@@ -89,6 +90,31 @@ REST_FRAMEWORK = {
 CORS_ORIGIN_WHITELIST = [
     'http://localhost:3000'
 ]
+
+# OpenID Login
+OIDC_RENEW_ID_TOKEN_EXPIRY_SECONDS = 60 * 60 * 24 * 7  # one week
+OIDC_RP_SIGN_ALGO = 'RS256'
+OIDC_USERNAME_ALGO = ''
+OIDC_RP_SCOPES = 'openid email profile'
+LOGOUT_REDIRECT_URL = '/'
+
+OIDC_RP_CLIENT_ID = 'evap'
+OIDC_RP_CLIENT_SECRET = 'evap-secret'
+
+OIDC_OP_AUTHORIZATION_ENDPOINT = os.getenv("OIDC_OP_AUTHORIZATION_ENDPOINT")
+OIDC_OP_TOKEN_ENDPOINT = os.getenv("OIDC_OP_TOKEN_ENDPOINT")
+OIDC_OP_USER_ENDPOINT = os.getenv("OIDC_OP_USER_ENDPOINT")
+OIDC_OP_JWKS_ENDPOINT = os.getenv("OIDC_OP_JWKS_ENDPOINT")
+
+
+# Add 'mozilla_django_oidc' authentication backend
+AUTHENTICATION_BACKENDS = (
+    'mozilla_django_oidc.auth.OIDCAuthenticationBackend',
+    # ...
+)
+
+LOGIN_REDIRECT_URL = "<URL path to redirect to after login>"
+LOGOUT_REDIRECT_URL = "<URL path to redirect to after logout>"
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
