@@ -1,11 +1,14 @@
 from django.shortcuts import render
+from django.views.generic import TemplateView
 from rest_framework import generics
 
 from .models import Lecture
 from .serializers import LectureSerializer
 
 
-# Create your views here.
+class HomePageView(TemplateView):
+    template_name = 'home.html'
+
 
 class ListLecture(generics.ListCreateAPIView):
     queryset = Lecture.objects.all()

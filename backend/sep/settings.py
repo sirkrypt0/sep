@@ -42,8 +42,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'corsheaders',
+    'users',
     'semesterplaner',
-    'authentication',
 ]
 
 MIDDLEWARE = [
@@ -91,12 +91,12 @@ CORS_ORIGIN_WHITELIST = [
     'http://localhost:3000'
 ]
 
+################# Authentication
 # OpenID Login
 OIDC_RENEW_ID_TOKEN_EXPIRY_SECONDS = 60 * 60 * 24 * 7  # one week
 OIDC_RP_SIGN_ALGO = 'RS256'
 OIDC_USERNAME_ALGO = ''
 OIDC_RP_SCOPES = 'openid email profile'
-LOGOUT_REDIRECT_URL = '/'
 
 OIDC_RP_CLIENT_ID = 'evap'
 OIDC_RP_CLIENT_SECRET = 'evap-secret'
@@ -109,12 +109,16 @@ OIDC_OP_JWKS_ENDPOINT = os.getenv("OIDC_OP_JWKS_ENDPOINT")
 
 # Add 'mozilla_django_oidc' authentication backend
 AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
     'mozilla_django_oidc.auth.OIDCAuthenticationBackend',
     # ...
 )
 
-LOGIN_REDIRECT_URL = "<URL path to redirect to after login>"
-LOGOUT_REDIRECT_URL = "<URL path to redirect to after logout>"
+LOGIN_REDIRECT_URL = "home"
+LOGOUT_REDIRECT_URL = "home"
+
+AUTH_USER_MODEL = 'users.UserProfile'
+
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
