@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+</head>
+<body>
+    <h1>Django Login </h1>
+    {% if user.is_authenticated %}
+        <p>Hi {{ user.username }}, your e-mail is {{ user.email }}
+        <p><a href="{% url 'logout' %}">Log out</a></p>
+            <form action="{% url 'oidc_logout' %}" method="post">
+                {%  csrf_token %}
+                <input type="submit" value="logout">
+            </form>
+    {% else %}
+        <p><a href="{% url 'signup' %}">Sign Up</a></p>
+        <p><a href="{% url 'login' %}">Log In </a></p>
+        <a href="{% url 'oidc_authentication_init' %}">Login OpenID Connect</a>
+    {% endif %}
+</body>
+</html>

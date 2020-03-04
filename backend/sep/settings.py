@@ -17,6 +17,10 @@ load_dotenv()
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+BACKEND_DIR = BASE_DIR  # rename variable for clarity
+FRONTEND_DIR = os.path.abspath(
+    os.path.join(BACKEND_DIR, '..', 'frontend'))
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
@@ -25,9 +29,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
+DEBUG = os.environ.get('DJANGO_ENV') == 'development'
+ALLOWED_HOSTS = []  # ['localhost']
 
 
 # Application definition
@@ -55,7 +58,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'mozilla_django_oidc.middleware.SessionRefresh'
+    'mozilla_django_oidc.middleware.SessionRefresh',
 ]
 
 ROOT_URLCONF = 'sep.urls'
@@ -81,8 +84,12 @@ WSGI_APPLICATION = 'sep.wsgi.application'
 
 # Rest framework
 REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'mozilla_django_oidc.contrib.drf.OIDCAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ],
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.AllowAny',
+        'rest_framework.permissions.IsAuthenticated',
     ]
 }
 
@@ -98,8 +105,8 @@ OIDC_RP_SIGN_ALGO = 'RS256'
 OIDC_USERNAME_ALGO = ''
 OIDC_RP_SCOPES = 'openid email profile'
 
-OIDC_RP_CLIENT_ID = 'evap'
-OIDC_RP_CLIENT_SECRET = 'evap-secret'
+OIDC_RP_CLIENT_ID = os.getenv('OIDC_RP_CLIENT_ID')
+OIDC_RP_CLIENT_SECRET = os.getenv('OIDC_RP_CLIENT_SECRET')
 
 OIDC_OP_AUTHORIZATION_ENDPOINT = os.getenv("OIDC_OP_AUTHORIZATION_ENDPOINT")
 OIDC_OP_TOKEN_ENDPOINT = os.getenv("OIDC_OP_TOKEN_ENDPOINT")
@@ -111,14 +118,12 @@ OIDC_OP_JWKS_ENDPOINT = os.getenv("OIDC_OP_JWKS_ENDPOINT")
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
     'mozilla_django_oidc.auth.OIDCAuthenticationBackend',
-    # ...
 )
 
-LOGIN_REDIRECT_URL = "home"
-LOGOUT_REDIRECT_URL = "home"
+LOGIN_REDIRECT_URL = "/"
+LOGOUT_REDIRECT_URL = "/"
 
 AUTH_USER_MODEL = 'users.UserProfile'
-
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
