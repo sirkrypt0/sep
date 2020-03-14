@@ -24,6 +24,7 @@ class LectureSerializer(serializers.ModelSerializer):
             'semester',
             'description',
             'timeslots',
+            'lecturer',
         )
         depth = 1
         model = Lecture
