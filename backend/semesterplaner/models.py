@@ -1,5 +1,6 @@
 from django.db import models
 from datetime import *
+import calendar
 # Create your models here.
 
 
@@ -11,9 +12,7 @@ class Lecturer(models.Model):
 
 
 class Lecture(models.Model):
-    SEMESTER_CHOICES = [
-        (x, x) for x in range(1, 7)
-    ]
+    SEMESTER_CHOICES = [(x, x) for x in range(1, 7)]
 
     title = models.CharField(max_length=200)
     lp = models.IntegerField(default=6)
@@ -34,19 +33,16 @@ class TimeSlot(models.Model):
         (time(15, 15), '15:15'),
         (time(17, 00), '17:00')
     ]
-    WEEKDAY_CHOICES = [
-        (0, 'Monday'),
-        (1, 'Tuesday'),
-        (2, 'Wednesday'),
-        (3, 'Thursday'),
-        (4, 'Friday')
-    ]
+    WEEKDAY_CHOICES = [(i, calendar.day_name[i]) for i in range(5)]
     TYPE_CHOICES = [
         (0, 'Lecture'),
         (1, 'Exercise')
     ]
+    DURATION_CHOICES = [(45 * i, 45 * i) for i in range(1, 9)]
+
     weekday = models.IntegerField(choices=WEEKDAY_CHOICES, default=0)
     time = models.TimeField(choices=TIME_CHOICES, verbose_name='Starting time')
+    duration = models.IntegerField(choices=DURATION_CHOICES, default=90)
     lecture = models.ForeignKey(Lecture, on_delete=models.CASCADE)
     hall = models.CharField(max_length=20, default='HS 1')
     type = models.IntegerField(choices=TYPE_CHOICES, default=0)
