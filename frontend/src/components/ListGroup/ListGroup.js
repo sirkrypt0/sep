@@ -1,9 +1,7 @@
-import React, {Component} from 'react';
-import {ListGroup, ListGroupItem } from 'react-bootstrap';
+import React, { Component } from 'react';
+import './ListGroup.css';
 
-import './ListGroup.css'
-
-class List extends Component{
+export class List extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -28,17 +26,24 @@ class List extends Component{
 
   render() {
     return(
-      <ListGroup>
-        {this.state.data.map(lecture => {
-          return (
-              <ListGroupItem key={lecture.id}>
-                {lecture.title}
-              </ListGroupItem>
-          );
-        })}
-      </ListGroup>
+      <div className="list"> Lectures
+        <div className="listbox" id="rectangle">
+          {this.state.data.map((lecture, id) => {
+            return (
+              <a href="#" className="list-group-item" list-group-item-action flex-column align-items-start key={id}>
+                <div className="d-flex w-100 justify-content-between">
+                  <h5 className="mb-1">{lecture.title}</h5>
+                  <small>{lecture.lp} LP</small>
+                </div>
+                <div className="d-flex w-100 justify-content-between">
+                  <h6 className="mb-1">{lecture.lecturer.name}</h6>
+                  <small>{lecture.semester}. Semester</small>
+                </div>
+              </a>
+            )
+            })}
+        </div>
+      </div>
     );
   }
 }
-
-export default List;

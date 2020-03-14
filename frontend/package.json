@@ -11,7 +11,8 @@
     "react-bootstrap": "latest",
     "react-dom": "^16.12.0",
     "react-scripts": "3.4.0",
-    "reactstrap": "latest"
+    "reactstrap": "latest",
+    "styled-components": "^5.0.1"
   },
   "scripts": {
     "start": "react-scripts start",

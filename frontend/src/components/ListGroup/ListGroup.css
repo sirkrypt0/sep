@@ -1,5 +1,18 @@
-.list-group{
+.d-flex{
+    right: 0;
     width: 20vw;
-    height: auto;
-    float: right;
+}
+.list{
+    right: 0;
+    position: absolute;
+    text-align: center;
+    width: 26vw;
+    top: 5vw;
+}
+#rectangle{
+    width: 20vw;
+    height: 600px;
+    right: 3vw;
+    position: absolute;
+    background: #eee;
 }
