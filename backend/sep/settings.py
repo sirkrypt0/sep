@@ -93,10 +93,13 @@ REST_FRAMEWORK = {
     ]
 }
 
-# Cors settings
-CORS_ORIGIN_WHITELIST = [
-    'http://localhost:3000'
-]
+# CORS settings
+CORS_ALLOW_CREDENTIALS = True
+CORS_ORIGIN_WHITELIST = ['http://localhost:3000']
+
+# CSRF settings
+CSRF_TRUSTED_ORIGINS = ['localhost:3000']
+
 
 ################# Authentication
 # OpenID Login
@@ -120,8 +123,8 @@ AUTHENTICATION_BACKENDS = (
     'mozilla_django_oidc.auth.OIDCAuthenticationBackend',
 )
 
-LOGIN_REDIRECT_URL = "/"
-LOGOUT_REDIRECT_URL = "/"
+LOGIN_REDIRECT_URL = "http://localhost:3000/"
+LOGOUT_REDIRECT_URL = "http://localhost:3000/"
 
 AUTH_USER_MODEL = 'users.UserProfile'
 
