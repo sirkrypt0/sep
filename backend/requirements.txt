@@ -1,4 +1,4 @@
-Django==3.0.3
+Django==3.0.7
 asgiref==3.2.3
 pip==20.0.2
 psycopg2==2.8.4
