@@ -23,6 +23,7 @@
         "react"
     ],
     "rules": {
+        "object-curly-spacing": ["error", "always"]
     },
     "settings": {
         "react": {

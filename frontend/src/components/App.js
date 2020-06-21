@@ -10,7 +10,6 @@ import { Planner } from './Pages/Planner';
 
 /** The App that gets loaded on site */
 class App extends Component {
-
   /**
    * renders the App on site
    * @return {[HTMLDivElement]} HTML to be displayed
