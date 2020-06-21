@@ -5,12 +5,7 @@ import Nav from 'react-bootstrap/Nav';
 
 import './Header.css';
 
-/** The header containing all necessary links */
 export const Header = () => {
-  /**
-   * renders the Header on site
-   * @return {[HTMLDivElement]} HTML to be displayed
-   */
   return (
     <Navbar role="navigation">
       <Navbar.Brand as={Link} to="/">Semesterplaner</Navbar.Brand>
@@ -21,4 +16,4 @@ export const Header = () => {
       </Nav>
     </Navbar>
   );
-}
+};
