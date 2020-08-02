@@ -1,0 +1,352 @@
+openapi: 3.0.0
+
+servers: []
+
+info:
+  description: This is a simple API
+  version: 0.1.0
+  title: sep API
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+
+security:
+  - OpenID:
+    - user
+
+paths:
+  /lectures:
+    get:
+      summary: Shows all lectures
+      parameters:
+      - name: professor
+        in: query
+        description: Filter for a specific professor
+        schema:
+          type: string
+          example: 'Meinel'
+      - name: lp
+        in: query
+        description: Filter for a certain number of LP
+        schema:
+          type: integer
+          example: 6
+      - name: semester
+        in: query
+        description: Filter for a specific semester
+        schema:
+          type: integer
+          example: 1
+      - name: name
+        in: query
+        description: Filter for a specific lecture
+        schema:
+          type: string
+          example: 'Digitale Systeme'
+      - name: mandatory
+        in: query
+        description: Filter for mandatory courses
+        schema:
+          type: boolean
+          example: true
+      security:
+        - OpenID:
+          - user
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  lectures:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Lecture'
+                  count:
+                    description: Count of all lectures
+                    type: integer
+                    format: uint
+                    example: 1
+        401:
+          description: Unauthorized
+        404:
+          description: Not found
+
+  /lectures/{lectureId}:
+    get:
+      parameters:
+        - $ref: '#/components/parameters/LectureId'
+      summary: Get a specific lecture
+      security:
+        - OpenID:
+          - user
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Lecture'
+        401:
+          description: Unauthorized
+        404:
+          description: Not found
+
+  /plans:
+    get:
+      summary: Returns saved plans
+      parameters:
+        - name: name
+          in: query
+          description: Filter for a specific plan
+          schema:
+            type: string
+            example: 'SoSe 2018'
+      security:
+        - OpenID:
+          - user
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  plans:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Plan'
+                  count:
+                    type: integer
+                    format: uint
+                    description: Count of all plans
+        401:
+          description: Unauthorized
+        404:
+          description: Not found
+
+    post:
+      summary: Creates new plan
+      security:
+        - OpenID:
+          - user
+      responses:
+        201:
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  plans:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Plan'
+                  count:
+                    type: integer
+                    format: uint
+                    example: 1
+                    description: Count of all plans
+        400:
+          description: Bad request
+        401:
+          description: Unauthorized
+
+    delete:
+      summary: Deletes a plan
+      security:
+        - OpenID:
+          - user
+      responses:
+        200:
+          description: OK
+        401:
+          description: Unauthorized
+        404:
+          description: Not found
+
+  /plans/{planId}:
+    get:
+      parameters:
+        - $ref: '#/components/parameters/PlanId'
+      summary: Get plan
+      security:
+        - OpenID:
+          - user
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Plan'
+
+        401:
+          description: Unauthorized
+        404:
+          description: Not found
+
+    patch:
+      parameters:
+        - $ref: '#/components/parameters/PlanId'
+      summary: Updates and saves the plan
+      security:
+        - OpenID:
+          - user
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Plan'
+        401:
+          description: Unauthorized
+        404:
+          description: Not found
+
+  /plans/{planId}/lectures/{lectureId}:
+    put:
+      summary: Update a lecture in the current plan
+      security:
+        - OpenID:
+          - user
+      parameters:
+        - $ref: '#/components/parameters/PlanId'
+        - $ref: '#/components/parameters/LectureId'
+      responses:
+        200:
+          description: OK
+        401:
+          description: Unauthorized
+        404:
+          description: Not found
+
+    delete:
+      summary: Delete a lecture in the current plan
+      security:
+        - OpenID:
+          - user
+      parameters:
+        - $ref: '#/components/parameters/PlanId'
+        - $ref: '#/components/parameters/LectureId'
+      responses:
+        200:
+          description: OK
+        401:
+          description: Unauthorized
+        404:
+          description: Not found
+
+components:
+  securitySchemes:
+    OpenID:
+      type: openIdConnect
+      openIdConnectUrl: https://test.de
+
+  schemas:
+    Lecture:
+      type: object
+      required:
+        - id
+        - name
+        - lp
+        - professor
+        - mandatory
+        - timeslots
+      properties:
+        id:
+          type: integer
+          format: uint
+          example: 1
+        name:
+          type: string
+          example: 'Mathematik 1'
+        lp:
+          type: integer
+          format: uint
+          example: 6
+        professor:
+          type: string
+          example: 'Hasso Plattner'
+        mandatory:
+          type: boolean
+          example: true
+        timeslots:
+          type: array
+          items:
+            $ref: '#/components/schemas/Timeslot'
+
+    Plan:
+      type: object
+      required:
+        - id
+        - name
+        - lectures
+        - totalLp
+      properties:
+        id:
+          type: integer
+          format: uint
+          example: 1
+        name:
+          type: string
+          example: 'WiSe 2019/20'
+        lectures:
+          type: array
+          items:
+            $ref: '#/components/schemas/Lecture'
+        totalLp:
+          type: integer
+          format: uint
+          example: 6
+
+    Timeslot:
+      type: object
+      required:
+        - type
+        - start
+        - duration
+        - weekday
+      properties:
+        type:
+          type: string
+          example: 'exercise'
+        start:
+          type: string
+          example: '09:15'
+        duration:
+          description: duration in minutes
+          type: integer
+          format: uint
+          example: 90
+        weekday:
+          description: weekday from 0 (monday) to 6 (sunday)
+          type: integer
+          format: uint
+          minimum: 0
+          maximum: 6
+          example: 3
+
+  parameters:
+    LectureId:
+      name: lectureId
+      description: ID of a lecture
+      in: path
+      required: true
+      schema:
+        type: integer
+        format: uint
+        example: 1234
+
+    PlanId:
+      name: planId
+      description: ID of a plan
+      in: path
+      required: true
+      schema:
+        type: integer
+        format: uint
+        example: 1234
