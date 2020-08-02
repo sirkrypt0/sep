@@ -20,10 +20,11 @@ from . import views
 
 urlpatterns = [
     path('', include('semesterplaner.urls')),
+    path('health/', views.health),
     path('users/', include('users.urls')),
     path('users/', include('django.contrib.auth.urls')),
     path('admin/', admin.site.urls),
-    path('csrf/', views.csrf),
-    path('ping/', views.ping),
+    # overwrite the mozilla logout view for our purpose
+    url(r'^oidc/logout/$', views.CustomOIDCLogoutView.as_view(), name='oidc_logout'),
     url(r'^oidc/', include('mozilla_django_oidc.urls')),
 ]

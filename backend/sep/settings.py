@@ -50,15 +50,15 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'mozilla_django_oidc.middleware.SessionRefresh',
+    'sep.middleware.CustomSessionRefresh',
 ]
 
 ROOT_URLCONF = 'sep.urls'
@@ -86,7 +86,7 @@ WSGI_APPLICATION = 'sep.wsgi.application'
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'mozilla_django_oidc.contrib.drf.OIDCAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
+        # 'rest_framework.authentication.SessionAuthentication',
     ],
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
@@ -95,11 +95,12 @@ REST_FRAMEWORK = {
 
 # CORS settings
 CORS_ALLOW_CREDENTIALS = True
-CORS_ORIGIN_WHITELIST = ['http://localhost:3000']
+CORS_ORIGIN_WHITELIST = ['http://127.0.0.1:3000', 'http://localhost:3000']
 
 # CSRF settings
-CSRF_TRUSTED_ORIGINS = ['localhost:3000']
-
+# we are a (mostly) stateless api so don't use sessions
+CSRF_USE_SESSIONS = False
+CSRF_COOKIE_HTTPONLY = False
 
 ################# Authentication
 # OpenID Login
@@ -115,18 +116,24 @@ OIDC_OP_AUTHORIZATION_ENDPOINT = os.getenv("OIDC_OP_AUTHORIZATION_ENDPOINT")
 OIDC_OP_TOKEN_ENDPOINT = os.getenv("OIDC_OP_TOKEN_ENDPOINT")
 OIDC_OP_USER_ENDPOINT = os.getenv("OIDC_OP_USER_ENDPOINT")
 OIDC_OP_JWKS_ENDPOINT = os.getenv("OIDC_OP_JWKS_ENDPOINT")
+OIDC_OP_REVOCATION_ENDPOINT = os.getenv("OIDC_OP_REVOCATION_ENDPOINT")
 
+OIDC_CALLBACK_CLASS = 'sep.views.CustomOIDCAuthCallbackView'
+OIDC_AUTHENTICATE_CLASS = 'sep.views.CustomOIDCAuthRequestView'
+
+OIDC_STORE_ACCESS_TOKEN = True
+OIDC_REDIRECT_URI = 'http://127.0.0.1:3000/login'
 
 # Add 'mozilla_django_oidc' authentication backend
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
-    'mozilla_django_oidc.auth.OIDCAuthenticationBackend',
+    'sep.auth.CustomOIDCAuthenticationBackend',
 )
 
-LOGIN_REDIRECT_URL = "http://localhost:3000/"
-LOGOUT_REDIRECT_URL = "http://localhost:3000/"
-
 AUTH_USER_MODEL = 'users.UserProfile'
+# We only use sessions when acquiring an access token to store the random state so having
+# non-http-only cookies should be fine
+SESSION_COOKIE_HTTPONLY = False
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
@@ -180,3 +187,23 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'INFO',
+    },
+    'loggers': {
+        'mozilla_django_oidc': {
+            'handlers': ['console'],
+            'level': 'DEBUG'
+        }
+    }
+}
