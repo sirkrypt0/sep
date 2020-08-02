@@ -1,7 +1,4 @@
 from django.contrib import admin
-from django.db import models
-from django.contrib.auth import get_user_model
-from django.contrib.auth.models import Group
 from django.contrib.auth.admin import UserAdmin
 from django.utils.translation import gettext_lazy as _
 

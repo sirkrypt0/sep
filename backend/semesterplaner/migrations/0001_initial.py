@@ -39,6 +39,7 @@ class Migration(migrations.Migration):
                 ('hall', models.CharField(default='HS 1', max_length=20)),
                 ('type', models.IntegerField(choices=[(0, 'Lecture'), (1, 'Exercise')], default=0)),
                 ('lecture', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='semesterplaner.Lecture')),
+                ('duration', models.IntegerField(choices=[(45, 45), (90, 90), (135, 135), (180, 180), (225, 225), (270, 270), (315, 315), (360, 360)], default=90))
             ],
         ),
         migrations.AddField(

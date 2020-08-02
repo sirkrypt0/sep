@@ -7,7 +7,7 @@ import { Header } from './Header/Header';
 import { Home } from './Pages/Home';
 import { MyPlans } from './Pages/MyPlans';
 import { Planner } from './Pages/Planner';
-import { Login } from './Login/Login';
+import Login from './Login/Login';
 
 /** The App that gets loaded on site */
 class App extends Component {
