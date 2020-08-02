@@ -1,7 +1,7 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import instance from '../../axiosConfig';
-import {Button, Container, Modal,
-  ModalBody, ModalFooter, ModalHeader} from 'reactstrap';
+import { Button, Container, Modal,
+  ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Cookies from 'js-cookie';
 

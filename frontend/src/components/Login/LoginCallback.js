@@ -1,6 +1,6 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import axios from 'axios';
-import {API_BASE_URL, LOGIN_ERROR_REDIRECT, LOGIN_REDIRECT}
+import { API_BASE_URL, LOGIN_ERROR_REDIRECT, LOGIN_REDIRECT }
   from '../../constants';
 import Cookies from 'js-cookie';
 
@@ -14,7 +14,7 @@ const LoginCallback = () => {
     ].join('&');
     // request access token from backend
     axios.get(`${API_BASE_URL}/oidc/callback/?${qParams}`,
-        {withCredentials: true})
+        { withCredentials: true })
         .then((res) => {
           window.localStorage.setItem('access_token', res.data['access_token']);
           Cookies.remove('sessionid');
